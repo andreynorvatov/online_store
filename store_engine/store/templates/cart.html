@@ -1,0 +1,107 @@
+{% extends 'base_store.html' %}
+
+
+{% block content %}
+<h3 class="text-center mt-5 mb-5">
+    Ваша корзина {% if not cart.products.count %}пуста{% endif %}
+</h3>
+
+
+
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+    <strong>Holy guacamole!</strong> {{ message }}.
+    <a href="{% url 'products_list_url' %}">
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+    </button>
+    </a>
+</div>
+
+{% endfor %}
+{% endif %}
+<!--
+{% if cart.products.count == 0 %}
+<meta http-equiv="refresh" content="1; URL=http://localhost:5000/">
+{% endif %}
+-->
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Фото</th>
+        <th scope="col">Описание</th>
+        <th scope="col">Количество</th>
+        <th scope="col">Цена</th>
+        <th scope="col">Удалить</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for item in cart.products.all %}
+    <tr>
+        <td
+                class="w-25"><img src="{{ item.product.image.url }}" class="img-fluid"
+                                  alt="Нет картинки"></td>
+        <td>{{ item.product.title }}</td>
+        <td>
+            <form action="{% url 'change_qty' slug=item.product.slug %}" method="post">
+                {% csrf_token %}
+                <input type="number" class="form-control" name="qty" style="width: 70px;" min="1"
+                       max="10"
+                       value="{{ item.qty }}">
+                <br>
+                <input type="submit" class="btn btn-primary" value="Изменить кол-во">
+            </form>
+        </td>
+        <td>{{ item.final_price }} ₽</td>
+        <td>
+
+            <a href="{% url 'delete_from_cart' slug=item.product.slug %}">
+                <button type="button"
+                        class="btn-close"
+                        aria-label="Close"></button>
+            </a>
+
+        </td>
+    </tr>
+    {% endfor %}
+    <tr>
+        <td colspan="2"></td>
+        <td>Сумма {{ cart.final_price }} ₽</td>
+    </tr>
+    </tbody>
+</table>
+
+<form action="{% url 'make_order' %}" method="POST">
+    {% csrf_token %}
+    {% for field in form %}
+        <div class="form-group">
+        {% if field.errors %}
+        <div class="alert alert-danger">
+            {{ field.errors }}
+        </div>
+        {% endif %}
+        {{ field.label }}
+        {{ field }}
+    </div>
+    {% endfor %}
+        <h1 class="mb-2"></h1>
+    <button type="submit" name="button" class="btn btn-primary">Оформить заказ</button>
+
+
+<!--    <fieldset>
+        <legend>Пожалуйста, представтесь</legend>
+        <div class="mb-3">
+            <input type="text" class="form-control" placeholder="Ваше имя">
+        </div>
+        <div class="mb-3">
+            <input type="tel" class="form-control" placeholder="Телефон">
+        </div>
+        <div class="mb-3">
+            <input type="text" class="form-control" placeholder="Email">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Оформить заказ</button>
+    </fieldset>
+</form>
+-->
+{% endblock content %}

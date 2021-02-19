@@ -1,0 +1,28 @@
+{% extends 'base_store.html' %}
+
+{% block title %}
+Каталог товаров
+{% endblock title %}
+
+
+{% block content %}
+<h1 class="mb-5 ">Каталог товаров</h1>
+{% for product in products %}
+
+    <div class="card" style="width: 18rem;">
+        <img src="{{ product.image.url }}"  class="card-img-top" alt="...">
+        <div class="card-body">
+            <p class="card-text"> {{ product.title }}</p>
+            <p class="card-text"> {{ product.price }} ₽</p>
+               <a href="{% url 'add_to_cart' slug=product.slug %}"
+                 class="btn btn-primary">Добавить в
+                корзину</a>
+
+
+        </div>
+
+    </div>
+
+
+{% endfor %}
+{% endblock %}
