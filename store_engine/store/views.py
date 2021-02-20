@@ -8,9 +8,14 @@ from django.contrib import messages
 from .utils import *
 
 from django.core.mail import send_mail
-from store_engine.settings import EMAIL_HOST_USER
+from store_engine.settings import EMAIL_HOST_USER, EMAIL_HOST, SENDGRID_API_KEY, FROM_EMAIL
 
 import random
+
+import os
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
+
 
 
 def products_list(request):
@@ -105,13 +110,33 @@ class MakeOrderView(View):
                 f'Тестовое здание, заказ № {order_number}',
                 f'{new_order.name}, заказ № {order_number} сформирован. В ближайшее время наш специалист '
                 f'свяжется с Вами по телефону {new_order.phone}.',
-                f'{EMAIL_HOST_USER}',
+                f'{FROM_EMAIL}',
                 [f'{new_order.email}'],
                 fail_silently=False
             )
+
+            # message = Mail(
+            #     from_email=f'{FROM_EMAIL}',
+            #     to_emails=f'{new_order.email}',
+            #     subject='Sending with Twilio SendGrid is Fun',
+            #     html_content='<strong>and easy to do anywhere, even with Python</strong>')
+            # try:
+            #     sg = SendGridAPIClient('SENDGRID_API_KEY')
+            #     response = sg.send(message)
+            #     print(response.status_code)
+            #     print(response.body)
+            #     print(response.headers)
+            # except Exception as e:
+            #     print(e)
+
+
+
 
             cart = Cart.objects.create()
             return HttpResponseRedirect('/cart/')
         print("Not Valid")
         messages.add_message(request, messages.INFO, f'Неверный Емэйл!')
         return HttpResponseRedirect('/cart/')
+
+
+
