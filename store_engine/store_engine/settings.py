@@ -126,32 +126,6 @@ STATICFILES_DIRS = (
 )
 
 # Email settings
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_USE_TLS = True
-# EMAIL_PORT = 587
-# EMAIL_HOST_USER = '2685post@gmail.com'
-# EMAIL_HOST_PASSWORD = '110992nn'
-
-# SENDGRID_API_KEY = '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'
-#
-# EMAIL_HOST = 'smtp.sendgrid.net'
-# EMAIL_HOST_USER = 'apikey'
-# EMAIL_HOST_PASSWORD = 'SENDGRID_API_KEY'
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
-
-
-# SENDGRID_API_KEY = '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'
-#
-# EMAIL_HOST = 'smtp.sendgrid.net'
-# EMAIL_HOST_USER = 'apikey'
-# EMAIL_HOST_PASSWORD = 'SENDGRID_API_KEY'
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
-#
-# FROM_EMAIL = '2685post@gmail.com'
-
 SENDGRID_API_KEY = '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'
 
 EMAIL_HOST = 'smtp.sendgrid.net'
