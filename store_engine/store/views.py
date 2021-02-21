@@ -93,21 +93,31 @@ class MakeOrderView(View):
             self.cart.save()
             new_order.cart = self.cart
             new_order.save()
-            messages.add_message(
-                request,
-                messages.INFO,
-                f'Спасибо {new_order.name}, ваш заказ № {order_number} оформлен. В ближайшее '
-                f'время мы свяжемся с Вами по телефону {new_order.phone} для его подтверждения'
-            )
 
-            send_mail(
-                f'Тестовое здание, заказ № {order_number}',
-                f'{new_order.name}, заказ № {order_number} сформирован. В ближайшее время наш специалист '
-                f'свяжется с Вами по телефону {new_order.phone}.',
-                f'{FROM_EMAIL}',
-                [f'{new_order.email}'],
-                fail_silently=False
-            )
+
+            try:
+                send_mail(
+                    f'Тестовое здание, заказ № {order_number}',
+                    f'{new_order.name}, заказ № {order_number} сформирован. В ближайшее время наш специалист '
+                    f'свяжется с Вами по телефону {new_order.phone}.',
+                    f'{FROM_EMAIL}',
+                    [f'{new_order.email}'],
+                    fail_silently=False
+                )
+
+                messages.add_message(
+                    request,
+                    messages.INFO,
+                    f'Спасибо {new_order.name}, ваш заказ № {order_number} оформлен. В ближайшее '
+                    f'время мы свяжемся с Вами по телефону {new_order.phone} для его подтверждения'
+                )
+
+            except Exception:
+                messages.add_message(
+                    request,
+                    messages.INFO,
+                    f'Спасибо {new_order.name}, ваш заказ № {order_number} оформлен, но почтовый клиент в данный момент не доступен.'
+                )
 
             cart = Cart.objects.create()
             return HttpResponseRedirect('/cart/')
